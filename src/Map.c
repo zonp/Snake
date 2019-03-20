@@ -20,11 +20,8 @@ void initMap()
     map.topX = 0;
     map.topY = 0;
 
-    if (map.row<5 || map.col<5)
-    {
-        perror("Error: window is too small !");
-        exit(-1);
-    }
+    /** 断言判断窗口大小是否合适 todo 如何避免 clion 调用时，　ｒｏｗ和ｃｏｌ为０的状况 **/
+    assert(map.row>5 && map.col>5);
     /** 为每个像素点分配内存 **/
     map.pixel = (char **) calloc(map.row, sizeof(char *));
     for (int i = 0; i<map.row; ++i)

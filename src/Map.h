@@ -5,7 +5,7 @@
 #ifndef SNAKE_MAP_H
 #define SNAKE_MAP_H
 
-
+#include <assert.h>
 #include <stdio.h>
 #include <sys/ioctl.h>
 #include <unistd.h>
