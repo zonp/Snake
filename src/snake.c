@@ -17,7 +17,6 @@ int main()
     initMap();
     /** 显示地图 **/
     map.show();
-
     clearMap();
     return 0;
 }

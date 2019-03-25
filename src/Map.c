@@ -49,12 +49,12 @@ void clearMap()
         return;
     }
     /* 回收像素内存 */
-//     https://www.imooc.com/wenda/detail/521776
-//    for (int i = 0; i<map.col; ++i)
-//    {
-//        free(map.pixel[i]);
-//        map.pixel[i] = NULL;
-//    }
+    /** https://www.imooc.com/wenda/detail/521776 **/
+    for (int i = 0; i<map.row; ++i)
+    {
+        free(*(map.pixel+i));
+        *(map.pixel+i) = NULL;
+    }
     free(map.pixel);
     map.pixel = NULL;
     map.exist = false;
@@ -93,9 +93,16 @@ void show_map()
 {
     char *str = "hello world!";
     size_t len = strlen(str);
-    for (int y = map.col/2, x = map.row*2/5, n = 0; n<len; n++)
+    /** 文字开始输出行数，ｘ坐标 **/
+    int x = map.row*2/5;
+    /** 文字开始输出列数，y坐标 **/
+    int y = map.col/2;
+    /**  字符输出起点x坐标 **/
+    char **start = map.pixel+x;
+    /** 依次在制订位置写入字符  **/
+    for (int n = 0; n<len && map.row>len+x; n++)
     {
-        *(*(map.pixel+x+n)+y) = str[n];
+        *(*(start+n)+y) = str[n];
     }
     /** 输出所有的像素 **/
     outputPixel();
