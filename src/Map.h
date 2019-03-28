@@ -13,6 +13,8 @@
 #include <stdbool.h>
 #include <string.h>
 
+/** 地图大小是否固定 **/
+#define FIXED true
 /** 地图宽(列)高(行) */
 #define MAP_ROW 35
 #define MAP_COL 80

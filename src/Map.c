@@ -15,8 +15,8 @@ void initMap()
     struct winsize w;
     /*获取控制台的长宽*/
     ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
-    map.row = w.ws_row<MAP_ROW ? w.ws_row : MAP_ROW;
-    map.col = w.ws_col<MAP_COL ? w.ws_col : MAP_COL;
+    map.row = w.ws_row<MAP_ROW && !FIXED ? w.ws_row : MAP_ROW;
+    map.col = w.ws_col<MAP_COL && !FIXED ? w.ws_col : MAP_COL;
     map.topX = 0;
     map.topY = 0;
 
@@ -94,15 +94,15 @@ void show_map()
     char *str = "hello world!";
     size_t len = strlen(str);
     /** 文字开始输出行数，ｘ坐标 **/
-    int x = map.row*2/5;
+    int x = map.row/2;
     /** 文字开始输出列数，y坐标 **/
-    int y = map.col/2;
+    int y = map.col*2/5;
     /**  字符输出起点x坐标 **/
     char **start = map.pixel+x;
     /** 依次在制订位置写入字符  **/
-    for (int n = 0; n<len && map.row>len+x; n++)
+    for (int n = 0; n<len && map.col>len+x; n++)
     {
-        *(*(start+n)+y) = str[n];
+        *(*start+y+n) = str[n];
     }
     /** 输出所有的像素 **/
     outputPixel();
