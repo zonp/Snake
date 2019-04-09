@@ -64,3 +64,23 @@ int main()
     endwin();  /* 暂停curses会话 */
     return 0;
 }
+
+
+
+void initial()
+{
+    initscr();                  //开启curses模式
+    clear();                    // 清除一个窗口
+    move(10, 20);               // 窗口位置光标功能
+    addstr("hello,world");      // 添加一串多字节字符，无需再显示到窗口并前进光标
+    curs_set(1);                // 设置光标是否可见
+    cbreak();                   //开启cbreak模式,除了 DELETE 或 CTRL 等仍被视为特殊控制字元外一切输入的字元将立刻被一一读取
+    nonl();                     //用来决定当输入资料时, 按下 RETURN 键是否被对应为 NEWLINE 字元
+    noecho();                   //echo() and noecho(): 此函式用来控制从键盘输入字元时是否将字元显示在终端机上
+    intrflush(stdscr, false);   // 启用或禁用中断刷新
+    keypad(stdscr, true);       //当开启 keypad 後, 可以使用键盘上的一些特殊字元, 如上下左右>等方向键
+    move(LINES-1, 0);           // 把光标移动到最后一行
+    refresh();                  //将做清除萤幕的工作
+    getch();                    // 从终端获取单字节字符
+    endwin();
+}
