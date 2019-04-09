@@ -8,7 +8,7 @@ set(CMAKE_VERBOSE_MAKEFILE ON)
 
 
 # 添加编译选项
-add_compile_options( -lcurses )
+add_compile_options(-lcurses)
 #set(CMAKE_C_FLAGS  "-lcurses")
 #add_definitions(-lcurses)
 ### 可执行文件的路径
@@ -17,7 +17,7 @@ SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ../bin)
 # 查找src目录下的所有源文件 并将名称保存到 DIR_SRCS 变量
 aux_source_directory(src DIR_SRCS)
 
-set(CMAKE_C_FLAGS  "-lcurses")
+set(CMAKE_C_FLAGS "-lcurses")
 
 # 添加 map 子目录
 #add_subdirectory(src/map)
