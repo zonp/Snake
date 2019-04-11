@@ -25,7 +25,7 @@
 #define MAP_COL 70
 /* 地图背景和前景颜色 **/
 #define MAP_BG_COLOR COLOR_BLUE
-#define MAP_FG_COLOR COLOR_BLACK
+#define MAP_FG_COLOR COLOR_CYAN
 
 // 定义显示地图的指针函数的类型
 typedef void (SHOW)();
@@ -41,8 +41,8 @@ typedef struct {
     MAP_SIZE row;
     MAP_SIZE col;
     // 顶点坐标
-    MAP_SIZE topX;
-    MAP_SIZE leftY;
+    MAP_SIZE ordinate;
+    MAP_SIZE abscissa;
     SHOW *show;
     // 所有的像素点
     PIXEL **pixel;

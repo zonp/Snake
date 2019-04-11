@@ -12,9 +12,9 @@ typedef struct {
     bool initialized;
     u_int8_t height;
     u_int8_t width;
-    /*  距离地图的上边距和左边距 **/
-    u_int topX;
-    u_int leftY;
+    /*  距离地图的纵坐标和横坐标 **/
+    u_int ordinate;
+    u_int abscissa;
     /* 背景和前景颜色**/
     u_int8_t bgColor;
     u_int8_t fgColor;

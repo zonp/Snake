@@ -23,8 +23,8 @@ void initMap()
     map.row = w.ws_row<MAP_ROW && !FIXED ? w.ws_row : MAP_ROW;
     map.col = w.ws_col<MAP_COL && !FIXED ? w.ws_col : MAP_COL;
 
-    map.topX = 3;
-    map.leftY = 3;
+    map.ordinate = 3;
+    map.abscissa = 3;
 
     /* 断言判断窗口大小是否合适  **/
     assert(map.row>10 && map.col>10);
@@ -44,14 +44,16 @@ void initMap()
     keypad(stdscr, true);       //当开启 keypad 後, 可以使用键盘上的一些特殊字元, 如上下左右>等方向键
 
     /* 初始化地图窗口 **/
-    map.map_win = newwin(map.row+7, map.col+2, map.topX-1, map.leftY-1);
-    map.map_sub_win = subwin(map.map_win, map.row, map.col, map.topX, map.leftY);
+    map.map_win = newwin(map.row+7, map.col+2, map.ordinate-1, map.abscissa-1);
+    map.map_sub_win = subwin(map.map_win, map.row, map.col, map.ordinate, map.abscissa);
 
     /* 设置地图颜色 */
     map_color();
     /* 设置地图边框 */
-    box(map.map_win, '+', '+');
-    mvwhline(map.map_win, map.map_sub_win->_maxy+2, 1, '+', map.map_win->_maxx);
+    //box(map.map_win, '|', '*');
+
+    wborder(map.map_win, '*', '*', '*', '*', '*', '*', '*', '*');
+    mvwhline(map.map_win, map.map_sub_win->_maxy+2, 1, '*', map.map_sub_win->_maxx + 1);
     /* 用空格填充所有的空白 */
     werase(map.map_sub_win);
 
@@ -82,17 +84,17 @@ void map_color()
     start_color();
     init_color(2, 500, 0, 500);
 
-    init_pair(1, COLOR_RED, 2);
-    init_pair(2, COLOR_GREEN, 2);
-    init_pair(3, COLOR_YELLOW, COLOR_BLACK);
-    init_pair(4, COLOR_BLUE, 2);
-    init_pair(5, COLOR_MAGENTA, 2);
-    init_pair(6, COLOR_CYAN, 2);
+    init_pair(1, MAP_FG_COLOR, MAP_BG_COLOR);
+    init_pair(2, COLOR_GREEN, MAP_BG_COLOR);
+    init_pair(3, COLOR_YELLOW, MAP_BG_COLOR);
+    init_pair(4, COLOR_BLUE, MAP_BG_COLOR);
+    init_pair(5, COLOR_MAGENTA, MAP_BG_COLOR);
+    init_pair(6, COLOR_CYAN, MAP_BG_COLOR);
 
     init_pair(7, COLOR_WHITE, 2);
-    wbkgd(map.map_sub_win, COLOR_PAIR(3));
+    wbkgd(map.map_sub_win, COLOR_PAIR(1));
     //wattrset(map.map_sub_win, COLOR_PAIR(3));
-    wattron(map.map_sub_win, COLOR_PAIR(3) | A_BOLD);
+    wattron(map.map_sub_win, COLOR_PAIR(1) | A_BOLD);
 }
 
 /* 清理地图 **/
@@ -146,8 +148,8 @@ void outputPixel()
 
 /*
  * 改变指定位置的像素点的值
- * @param x
  * @param y
+ * @param x
  * @param pixel
  */
 void changePixel(MAP_SIZE y, MAP_SIZE x, PIXEL pixel)

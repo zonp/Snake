@@ -17,8 +17,8 @@ void initFood()
     food.height = 1;
     food.width = 1;
     /* 设置默认位置 **/
-    food.topX = 0;
-    food.leftY = 0;
+    food.ordinate = 0;
+    food.abscissa = 0;
     /* 设置默认背景和前景颜色 **/
     food.bgColor = MAP_FG_COLOR;
     food.fgColor = MAP_BG_COLOR;
@@ -35,10 +35,10 @@ void initFood()
  */
 void showFood()
 {
-    food.topX = (u_int) rand()%map.col;
-    food.leftY = (u_int) rand()%map.row;
+    food.ordinate = (u_int) rand()%map.col;
+    food.abscissa = (u_int) rand()%map.row;
     PIXEL fp;
     fp.c_p = '0';
-    changePixel(food.leftY, food.topX, fp);
+    changePixel(food.abscissa, food.ordinate, fp);
     map.show();
 }
