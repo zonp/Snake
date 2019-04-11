@@ -7,9 +7,11 @@ void new_win()
 {
     char str[200] = {0};
     WINDOW *my_win, *my_sub_win;
-    my_win = newwin(22, 32, 20, 10);
-    my_sub_win = subwin(my_win, 20, 30, 21, 11);
-    box(my_win, '|', '-');
+    my_win = newwin(22, 82, 20, 10);
+    my_sub_win = subwin(my_win, 20, 80, 21, 11);
+
+    wborder(my_win, '+', '+', '+', '+', 0, 0, 0, 0);
+    // box(my_win, '*', '*');
     if (has_colors() && can_change_color())
     {
         strcpy(str, "can change color \n");
