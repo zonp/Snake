@@ -35,10 +35,10 @@ void initFood()
  */
 void showFood()
 {
-    food.topX = (u_int) rand()%map.row;
-    food.leftY = (u_int) rand()%map.col;
+    food.topX = (u_int) rand()%map.col;
+    food.leftY = (u_int) rand()%map.row;
     PIXEL fp;
     fp.c_p = '0';
-    changePixel(food.topX, food.leftY, fp);
+    changePixel(food.leftY, food.topX, fp);
     map.show();
 }

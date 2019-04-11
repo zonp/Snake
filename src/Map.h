@@ -6,6 +6,7 @@
 #define SNAKE_MAP_H
 
 #include <assert.h>
+#include <curses.h>
 #include <stdio.h>
 #include <sys/ioctl.h>
 #include <unistd.h>
@@ -13,37 +14,42 @@
 #include <stdbool.h>
 #include <string.h>
 
+#include "Config.h.in"
+
+
 /* 地图大小是否固定 **/
 #define FIXED true
 /* 地图宽(列)高(行) */
-#define MAP_ROW 35
-#define MAP_COL 80
+#define MAP_SIZE unsigned int
+#define MAP_ROW 20
+#define MAP_COL 70
 /* 地图背景和前景颜色 **/
-#define MAP_BG_COLOR 44
-#define MAP_FG_COLOR 32
+#define MAP_BG_COLOR COLOR_BLUE
+#define MAP_FG_COLOR COLOR_BLACK
 
 // 定义显示地图的指针函数的类型
 typedef void (SHOW)();
 
-typedef union
-{
+typedef union {
     char c_p;
     int i_p;
-}  PIXEL;
+} PIXEL;
 
 /* 地图结构体变量Map **/
 typedef struct {
     /* 行 **/
-    unsigned int row;
-    unsigned int col;
+    MAP_SIZE row;
+    MAP_SIZE col;
     // 顶点坐标
-    unsigned int topX;
-    unsigned int leftY;
+    MAP_SIZE topX;
+    MAP_SIZE leftY;
     SHOW *show;
     // 所有的像素点
     PIXEL **pixel;
     /* 判断地图是否已经被初始化 **/
     bool exist;
+
+    WINDOW *map_win, *map_sub_win;
 } MAP;
 /* 定义全局地图 **/
 MAP map;
@@ -52,12 +58,22 @@ MAP map;
 void initMap();
 
 /*
+ * 设置地图颜色
+ */
+void map_color();
+
+/*
+ * 设置地图大小
+ */
+void map_size();
+
+/*
  * 改变指定位置的像素点的值
  * @param x
  * @param y
  * @param pixel
  */
-void changePixel(int x, int y, PIXEL pixel);
+void changePixel(MAP_SIZE x, MAP_SIZE y, PIXEL pixel);
 
 /* 输出像素点 **/
 void outputPixel();

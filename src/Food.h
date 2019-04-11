@@ -5,7 +5,7 @@
 #ifndef SNAKE_FOOD_H
 #define SNAKE_FOOD_H
 
-#define MAX_FOOD 200
+#define MAX_FOOD 5000
 
 typedef struct {
     /* 判断是否已经初始化 **/
