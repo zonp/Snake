@@ -38,11 +38,11 @@ void initFood()
  */
 void showFood()
 {
-    food.ordinate = (u_int) rand()%map.col;
-    food.abscissa = (u_int) rand()%map.row;
+    food.ordinate = (u_int) rand()%map.row;
+    food.abscissa = (u_int) rand()%map.col;
     PIXEL fp;
     fp.ch_p = FOOD_UNIT | COLOR_PAIR(FOOD_PAIR);
-    if (changePixel(food.abscissa, food.ordinate, fp) == OK)
+    if (changePixel(food.ordinate, food.abscissa, fp) == OK)
     {
         /* 食物数量加一 */
         food.count += 1;

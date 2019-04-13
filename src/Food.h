@@ -5,7 +5,7 @@
 #ifndef SNAKE_FOOD_H
 #define SNAKE_FOOD_H
 
-#define MAX_FOOD 500
+#define MAX_FOOD 50
 
 typedef struct {
     /* 判断是否已经初始化 **/
@@ -13,8 +13,8 @@ typedef struct {
     u_int8_t height;
     u_int8_t width;
     /*  距离地图的纵坐标和横坐标 **/
-    u_int ordinate;
-    u_int abscissa;
+    MAP_SIZE ordinate;
+    MAP_SIZE abscissa;
     /* 背景和前景颜色**/
     u_int8_t bgColor;
     u_int8_t fgColor;

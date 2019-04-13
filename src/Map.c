@@ -18,6 +18,7 @@ void initMap()
 
     map.ordinate = 3;
     map.abscissa = 3;
+    map.floor_unit.ch_p = FLOOR_UNIT | COLOR_PAIR(MAP_PAIR);
 
     /* 断言判断窗口大小是否合适  **/
     assert(map.row>10 && map.col>10);
@@ -25,12 +26,14 @@ void initMap()
     map.pixel = (PIXEL **) calloc(map.row, sizeof(PIXEL *));
     for (int i = 0; i<map.row; ++i)
     {
+        /* calloc 分配的内存自动用 \0 填充 */
         *(map.pixel+i) = (PIXEL *) calloc(map.col, sizeof(PIXEL));
     }
 
     initscr();                  //开启curses模式
     cbreak();                   //开启cbreak模式,除了 DELETE 或 CTRL 等仍被视为特殊控制字元外一切输入的字元将立刻被一一读取
     noecho();                   //echo() and noecho(): 此函式用来控制从键盘输入字元时是否将字元显示在终端机上
+    nonl();                     // 不解析换行
     curs_set(0);                // 设置光标是否可见
     keypad(stdscr, true);       //当开启 keypad 後, 可以使用键盘上的一些特殊字元, 如上下左右>等方向键
     clear();                    // 清除一个窗口
@@ -61,8 +64,8 @@ void initMap()
     map.exist = true;
 
     /* 输出地图的行数和列数 **/
-    mvwprintw(map.map_win, map.row+3, 1, "\trow: %d", map.row);
-    mvwprintw(map.map_win, map.row+4, 1, "\tcol: %d", map.col);
+    mvwprintw(map.map_win, map.row+3, 1, "  row: %d", map.row);
+    mvwprintw(map.map_win, map.row+4, 1, "  col: %d", map.col);
     wrefresh(map.map_win);
 }
 
@@ -117,6 +120,7 @@ void clearMap()
     refresh();                  //将做清除萤幕的工作
     nocbreak();                   //开启cbreak模式,除了 DELETE 或 CTRL 等仍被视为特殊控制字元外一切输入的字元将立刻被一一读取
     echo();                   //echo() and noecho(): 此函式用来控制从键盘输入字元时是否将字元显示在终端机上
+    nl();
     curs_set(1);                // 设置光标是否可见
     wclear(map.map_sub_win);
     delwin(map.map_sub_win);
@@ -125,7 +129,6 @@ void clearMap()
     delwin(map.map_win);
     endwin();
 }
-
 
 /*
  * 改变指定位置的像素点的值
@@ -138,7 +141,7 @@ int changePixel(MAP_SIZE y, MAP_SIZE x, PIXEL pixel)
     *(*(map.pixel+y)+x) = pixel;
     int rs = mvwaddch(map.map_sub_win, y, x, pixel.ch_p);
     wrefresh(map.map_sub_win);
-    
+
     return rs;
 }
 

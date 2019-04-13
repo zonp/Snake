@@ -41,9 +41,6 @@ typedef struct unit_attribute {
     MAP_SIZE ordinate;
     /* 横坐标 */
     MAP_SIZE abscissa;
-    /* 颜色对 */
-    u_int8_t bg_color;
-    u_int8_t fg_color;
 
     /* 其他属性 */
     PIXEL other_attr;
@@ -66,55 +63,82 @@ enum DIRECT {
 struct {
     enum DIRECT direct;
     u_int8_t length;
-    /* 蛇的身体 链表 */
-    unit_attr *body;
+    /* 蛇头的坐标 */
+    MAP_SIZE coordinate_y;
+    MAP_SIZE coordinate_x;
+    /* 蛇的蛇头 链表 */
+    unit_attr *header;
 } snake;
 
 void show_snake();
-void going();
+unit_attr *new_body(MAP_SIZE y, MAP_SIZE x);
 
 void init_snake()
 {
     snake.direct = DIRECT_BREAK;
     snake.direct = 0;
-    snake.body = NULL;
+    snake.header = NULL;
+    snake.coordinate_y = 0;
+    snake.coordinate_x = 0;
 }
 
 void show_snake()
 {
-    if (snake.body == NULL)
+    if (snake.header == NULL)
     {
-        unit_attr *head = (unit_attr *) malloc(sizeof(unit_attr));
+        unit_attr *head = new_body(snake.coordinate_y, snake.coordinate_x);
         head->is_head = true;
-        head->abscissa = 1;
-        head->ordinate = 1;
-        head->bg_color = COLOR_RED;
-        head->fg_color = COLOR_YELLOW;
-        head->other_attr.ch_p = BODY_UNIT | A_BOLD | A_BLINK | COLOR_PAIR(SNAKE_PAIR);
-        /* 蛇尾的坐标 */
-        head->prefix = NULL;
-        head->next = NULL;
-
-        snake.body = head;
+        head->other_attr.ch_p |= A_BLINK | COLOR_PAIR(7);
+        head->prefix = head;
+        snake.header = head;
     }
     // todo
-    changePixel(snake.body->ordinate, snake.body->abscissa, snake.body->other_attr);
+    int rs = changePixel(snake.header->ordinate, snake.header->abscissa, snake.header->other_attr);
 }
 
+unit_attr *new_body(MAP_SIZE y, MAP_SIZE x)
+{
+    unit_attr *body_unit = (unit_attr *) malloc(sizeof(unit_attr));
+    body_unit->is_head = false;
+    body_unit->ordinate = y;
+    body_unit->abscissa = x;
+    body_unit->other_attr.ch_p = BODY_UNIT | COLOR_PAIR(SNAKE_PAIR) | A_BOLD;
+    body_unit->prefix = NULL;
+    body_unit->next = NULL;
+
+    return body_unit;
+}
+
+void *delete_body(unit_attr *head)
+{
+    unit_attr *last;
+    do
+    {
+        last = head->prefix;
+        head->prefix = last->prefix;
+        free(last);
+    }
+    while (last != head);
+    free(head);
+    return NULL;
+}
 /*
  * 前进
  */
 void going(int keyCode)
 {
-    mvwprintw(map.map_win, map.row+3, 20, "\tkey is : %o", keyCode);
-    wrefresh(map.map_win);
-
     /*
      * 如果没有改变方向，继续向前
      */
-    if (keyCode == ERR && snake.direct != DIRECT_BREAK)
+    if (keyCode == ERR)
     {
         keyCode = snake.direct;
+    }
+    else
+    {
+        /* 输出当前输入的key */
+        mvwprintw(map.map_win, map.row+3, 15, " keyCode : %3o, %3d, %3c ", keyCode, keyCode, keyCode);
+        wrefresh(map.map_win);
     }
 
     switch (keyCode)
@@ -126,7 +150,7 @@ void going(int keyCode)
             if (snake.direct != DIRECT_DOWN)
             {
                 snake.direct = DIRECT_UP;
-                snake.body->ordinate -= 1;
+                snake.coordinate_y -= 1;
             }
             break;
         case KEY_DOWN:
@@ -136,7 +160,7 @@ void going(int keyCode)
             if (snake.direct != DIRECT_UP)
             {
                 snake.direct = DIRECT_DOWN;
-                snake.body->ordinate += 1;
+                snake.coordinate_y += 1;
             }
             break;
         case KEY_LEFT:
@@ -146,7 +170,7 @@ void going(int keyCode)
             if (snake.direct != DIRECT_RIGHT)
             {
                 snake.direct = DIRECT_LEFT;
-                snake.body->abscissa -= 1;
+                snake.coordinate_x -= 1;
             }
             break;
         case KEY_RIGHT:
@@ -156,7 +180,7 @@ void going(int keyCode)
             if (snake.direct != DIRECT_LEFT)
             {
                 snake.direct = DIRECT_RIGHT;
-                snake.body->abscissa += 1;
+                snake.coordinate_x += 1;
             }
             break;
 //        case KEY_ENTER:
@@ -166,10 +190,12 @@ void going(int keyCode)
 //        case 0336:
 //            exit_game();
 //            break;
+        case 't':
+            snake.direct = DIRECT_BREAK;
+            break;
         default:
             break;
     }
-
     /* 没有开始 */
     if (snake.direct == DIRECT_BREAK)
     {
@@ -177,21 +203,90 @@ void going(int keyCode)
     }
 
     /* 查看地图，当前位置是否有食物 */
-    int y = snake.body->ordinate;
-    int x = snake.body->abscissa;
     /* 也可以通过 mvwinch(win, y, x) 获取坐标位置的chtype 判断 判 **/
-    //mvwprintw(map.map_win, map.row+4, 20, "\tch is : %c", mvwinch(map.map_sub_win, y, x));
-    //wrefresh(map.map_win);
+    chtype ch = mvwinch(map.map_sub_win, snake.coordinate_y, snake.coordinate_x);
+    mvwprintw(map.map_win, map.row+4, 15, " inch : %d, '%c', %o", ch & A_CHARTEXT, ch & A_CHARTEXT, ch & A_CHARTEXT);
+    mvwprintw(map.map_win, map.row+3, 50, "coordinate Y = %d , %d", snake.coordinate_y, snake.header->ordinate);
+    mvwprintw(map.map_win, map.row+4, 50, "coordinate X = %d , %d", snake.coordinate_x, snake.header->abscissa);
+    wrefresh(map.map_win);
 
-    //if (((*(*(map.pixel+y)+x)).ch_p & A_CHARTEXT) == FOOD_UNIT)
-    //{
-    // 把蛇头移动到新的位置
-    //changePixel(snake.body->ordinate, snake.body->abscissa, snake.body->other_attr);
-    //}
+    /* 判断是走出坐标范围 */
+    if (snake.coordinate_y>=map.row || snake.coordinate_y<0)
+    {
+        clearMap();
+        delete_body(snake.header);
+        perror("纵坐标超出地图范围");
+        exit(1);
+    }
+    if (snake.coordinate_x>=map.col || snake.coordinate_x<0)
+    {
+        clearMap();
+        delete_body(snake.header);
+        perror("横坐标超出地图范围");
+        exit(1);
+    }
+    unit_attr *header = snake.header;
+    unit_attr *last = header->prefix;
+    unit_attr *second = header->next;
+
+    /* 有食物，不移动蛇尾，直接在蛇头后面添加一节新的 */
+    if (((*(*(map.pixel+snake.coordinate_y)+snake.coordinate_x)).ch_p & A_CHARTEXT) == FOOD_UNIT)
+    {
+        //食物减1
+        --food.count;
+        // 添加蛇单元
+        unit_attr *new_unit = new_body(header->ordinate, header->abscissa);
+        new_unit->prefix = header;
+        new_unit->next = second;
+
+        header->next = new_unit;
+
+        if (second != NULL)
+        {
+            second->prefix = new_unit;
+        }
+
+        if (header->prefix == header)
+        {
+            header->prefix = new_unit;
+        }
+
+        second = new_unit;
+        //changePixel(new_unit->ordinate, new_unit->ordinate, new_unit->other_attr);
+    }
+    else
+    {
+        /* 蛇尾的移动: 把蛇尾移动到蛇头后面的位置 */
+        /* 至少两节 */
+
+        if (last->prefix != header) /* 至少三节 */
+        {
+            /* 确定新的蛇尾 */
+            header->prefix = last->prefix;
+            header->next = last;
+
+            /* 插入蛇节 */
+            last->prefix = header;
+            last->next = second;
+            second = last;
+            last = header->prefix;
+        }
+
+        /* 覆盖最后一节占有的位置 */
+        changePixel(last->ordinate, last->abscissa, map.floor_unit);
+
+        if (second != NULL)
+        {
+            second->ordinate = header->ordinate;
+            second->abscissa = header->abscissa;
+            //changePixel(second->ordinate, second->ordinate, second->other_attr);
+        }
+    }
+
+    header->ordinate = snake.coordinate_y;
+    header->abscissa = snake.coordinate_x;
     /* 蛇头的移动 */
-
-    /* 蛇尾的移动 */
-
+    changePixel(header->ordinate, header->abscissa, header->other_attr);
 }
 
 int main(int argc, char *argv[])
@@ -209,14 +304,14 @@ int main(int argc, char *argv[])
     initMap();
     /* 显示地图 **/
     hello_world();
-    getch();
+    //getch();
     init_snake();
     show_snake();
 
     getch();
     /* 初始化食物　**/
     initFood();
-    halfdelay(1);
+    halfdelay(5);
     /*
      * 刷新一次，前进一次，如果食物没有达到最大值，添加一个食物
      */
@@ -237,6 +332,7 @@ int main(int argc, char *argv[])
     }
     while (keyCode != 'q' && keyCode != '0');
 
+    snake.header = delete_body(snake.header);
     clearMap();
     return 0;
 }
