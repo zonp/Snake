@@ -17,23 +17,13 @@
 #include "Config.h.in"
 
 
-/* 地图大小是否固定 **/
-#define FIXED true
 /* 地图宽(列)高(行) */
 #define MAP_SIZE unsigned int
 #define MAP_ROW 20
 #define MAP_COL 70
 /* 地图背景和前景颜色 **/
-#define MAP_BG_COLOR COLOR_BLUE
-#define MAP_FG_COLOR COLOR_CYAN
-
-// 定义显示地图的指针函数的类型
-typedef void (SHOW)();
-
-typedef union {
-    char c_p;
-    int i_p;
-} PIXEL;
+#define MAP_BG_COLOR COLOR_CYAN
+#define MAP_FG_COLOR COLOR_BLUE
 
 /* 地图结构体变量Map **/
 typedef struct {
@@ -43,7 +33,6 @@ typedef struct {
     // 顶点坐标
     MAP_SIZE ordinate;
     MAP_SIZE abscissa;
-    SHOW *show;
     // 所有的像素点
     PIXEL **pixel;
     /* 判断地图是否已经被初始化 **/
@@ -58,7 +47,7 @@ MAP map;
 void initMap();
 
 /*
- * 设置地图颜色
+ * 初始化地图颜色
  */
 void map_color();
 
@@ -72,14 +61,9 @@ void map_size();
  * @param x
  * @param y
  * @param pixel
+ * @return int
  */
-void changePixel(MAP_SIZE x, MAP_SIZE y, PIXEL pixel);
-
-/* 输出像素点 **/
-void outputPixel();
-
-/* 地图方法 **/
-void show_map();
+int changePixel(MAP_SIZE x, MAP_SIZE y, PIXEL pixel);
 
 /* 地图中输入ｈｅｌｌｏ　ｗｏｒｌｄ **/
 void hello_world();

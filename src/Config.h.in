@@ -3,7 +3,25 @@
 #define SNAKE_VERSION_MAJOR 1
 #define SNAKE_VERSION_MINOR 0
 
-#define DEBUG TRUE
+#define DEBUG       TRUE
+
+/* 地图大小是否固定 **/
+#define FIXED true
+// 定义需要的颜色对
+#define MAP_PAIR    1
+#define SNAKE_PAIR  2
+#define FOOD_PAIR   3
+// 定义游戏元素
+#define FLOOR_UNIT      ' '
+#define FOOD_UNIT       '~'
+#define BODY_UNIT       ':'
+
+// 定义显示地图的指针函数的类型
+typedef void (FUN_POINTER)();
+
+typedef union {
+    chtype ch_p;
+} PIXEL;
 
 char log_msg[100];
 

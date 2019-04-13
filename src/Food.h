@@ -5,7 +5,7 @@
 #ifndef SNAKE_FOOD_H
 #define SNAKE_FOOD_H
 
-#define MAX_FOOD 5000
+#define MAX_FOOD 500
 
 typedef struct {
     /* 判断是否已经初始化 **/
@@ -18,8 +18,10 @@ typedef struct {
     /* 背景和前景颜色**/
     u_int8_t bgColor;
     u_int8_t fgColor;
+    /* 食物的数量 */
+    unsigned count;
     /* 显示方法 **/
-    SHOW *show;
+    FUN_POINTER *show;
 } FOOD;
 
 FOOD food;

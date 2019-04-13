@@ -13,6 +13,8 @@ void initFood()
     {
         return;
     }
+
+    food.count = 0;
     /* 设置大小 **/
     food.height = 1;
     food.width = 1;
@@ -20,8 +22,9 @@ void initFood()
     food.ordinate = 0;
     food.abscissa = 0;
     /* 设置默认背景和前景颜色 **/
-    food.bgColor = MAP_FG_COLOR;
-    food.fgColor = MAP_BG_COLOR;
+    food.bgColor = COLOR_RED;
+    food.fgColor = COLOR_RED;
+    init_pair('f', food.fgColor, food.bgColor);
     /* 加载展示食物的方法　 **/
     food.show = showFood;
     //
@@ -38,7 +41,10 @@ void showFood()
     food.ordinate = (u_int) rand()%map.col;
     food.abscissa = (u_int) rand()%map.row;
     PIXEL fp;
-    fp.c_p = '0';
-    changePixel(food.abscissa, food.ordinate, fp);
-    map.show();
+    fp.ch_p = FOOD_UNIT | COLOR_PAIR(FOOD_PAIR);
+    if (changePixel(food.abscissa, food.ordinate, fp) == OK)
+    {
+        /* 食物数量加一 */
+        food.count += 1;
+    }
 }
