@@ -26,3 +26,5 @@ typedef union {
 char log_msg[100];
 
 void write_log();
+
+void snake_break();

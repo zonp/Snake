@@ -121,11 +121,12 @@ void clearMap()
     nocbreak();                   //开启cbreak模式,除了 DELETE 或 CTRL 等仍被视为特殊控制字元外一切输入的字元将立刻被一一读取
     echo();                   //echo() and noecho(): 此函式用来控制从键盘输入字元时是否将字元显示在终端机上
     nl();
+    keypad(stdscr, false);
     curs_set(1);                // 设置光标是否可见
-    wclear(map.map_sub_win);
-    delwin(map.map_sub_win);
+    clear();
 
-    wclear(map.map_win);
+    standend();
+    delwin(map.map_sub_win);
     delwin(map.map_win);
     endwin();
 }
