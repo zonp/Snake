@@ -105,7 +105,77 @@ void show_snake()
         snake.header = head;
     }
     // todo
-    int rs = changePixel(snake.header->ordinate, snake.header->abscissa, snake.header_attr);
+    changePixel(snake.header->ordinate, snake.header->abscissa, snake.header_attr);
+}
+
+void move_snake()
+{
+    /* 新的坐标的值 */
+    char coordinate_value = (*(map.pixel+snake.coordinate_y)+snake.coordinate_x)->ch_p & A_CHARTEXT;
+    unit_attr *header = snake.header;
+    unit_attr *second = header->next;
+
+    /* 添加蛇单元 */
+    unit_attr *new_unit = new_body(header->ordinate, header->abscissa);
+    header->next = new_unit;
+    new_unit->next = second;
+    changePixel(new_unit->ordinate, new_unit->abscissa, new_unit->other_attr);
+
+    /* 保存最后一个单元 */
+    snake.last = snake.last == NULL || snake.last->is_head ? new_unit : snake.last;
+
+    /* 同步蛇头坐标 */
+    header->ordinate = snake.coordinate_y;
+    header->abscissa = snake.coordinate_x;
+    /* 蛇头的移动 */
+    changePixel(header->ordinate, header->abscissa, snake.header_attr);
+
+    /* 有食物，不移动蛇尾，直接在蛇头后面添加一节新的 */
+    if (coordinate_value == FOOD_UNIT)
+    {
+        /* 食物减1 */
+        --food.count;
+        return;
+    }
+
+    /* 找到最后两个单元 */
+    unit_attr *second_to_last = header;
+    unit_attr *last = second_to_last->next;
+    for (int i = 0; last->next != NULL && i<100000; ++i)
+    {
+        second_to_last = last;
+        last = second_to_last->next;
+    }
+
+    if (last != snake.last)
+    {
+        sprintf(log_msg, "坐标错误\n%p\n%p", last, snake.last);
+        snake_break(log_msg);
+    }
+    /* 把倒数第二个作为最后一个 */
+    snake.last = second_to_last;
+    snake.last->next = NULL;
+
+    /* 蛇尾的移动: 把蛇尾移动到蛇头后面的位置 */
+    /* todo 解决蛇身断裂的bug */
+    unit_attr *body = header;
+    while (body != NULL)
+    {
+        if (body->ordinate == last->ordinate && body->abscissa == last->abscissa)
+        {
+            break;
+        }
+
+        body = body->next;
+    }
+    if (body == NULL || body == last)
+    {
+        changePixel(last->ordinate, last->abscissa, map.floor_unit);
+    }
+
+    // 释放内存
+    free(last);
+    return;
 }
 unit_attr *new_body(MAP_SIZE y, MAP_SIZE x)
 {
@@ -148,7 +218,7 @@ void going(int keyCode)
         mvwprintw(map.map_win, map.row+3, 15, "keyCode : %3c, %3d", keyCode, keyCode);
         wrefresh(map.map_win);
     }
-
+    /* 判断方向和坐标 */
     switch (keyCode)
     {
         case KEY_UP:
@@ -228,58 +298,7 @@ void going(int keyCode)
         snake_break("横坐标超出地图范围");
     }
 
-    unit_attr *header = snake.header;
-    unit_attr *second = header->next;
-
-    // 添加蛇单元
-    unit_attr *new_unit = new_body(header->ordinate, header->abscissa);
-    header->next = new_unit;
-    new_unit->next = second;
-
-    // 保存最后一个单元
-    if (snake.last == NULL || snake.last->is_head)
-    {
-        snake.last = new_unit;
-    }
-
-    changePixel(new_unit->ordinate, new_unit->abscissa, new_unit->other_attr);
-
-
-    /* 有食物，不移动蛇尾，直接在蛇头后面添加一节新的 */
-    if (((*(*(map.pixel+snake.coordinate_y)+snake.coordinate_x)).ch_p & A_CHARTEXT) == FOOD_UNIT)
-    {
-        //食物减1
-        --food.count;
-    }
-    else
-    {
-        unit_attr *last = header->next;
-        unit_attr *second_to_last = header;
-        for (int i = 0; last->next != NULL && i<10000; ++i)
-        {
-            second_to_last = last;
-            last = last->next;
-        }
-
-        if (last != snake.last)
-        {
-            sprintf(log_msg, "坐标错误\n%p\n%p", last, snake.last);
-            snake_break(log_msg);
-        }
-        /* 蛇尾的移动: 把蛇尾移动到蛇头后面的位置 */
-        changePixel(last->ordinate, last->abscissa, map.floor_unit);
-
-        snake.last = second_to_last;
-        second_to_last->next = NULL;
-        // 释放内存
-        free(last);
-    }
-
-    // 更新蛇头坐标
-    header->ordinate = snake.coordinate_y;
-    header->abscissa = snake.coordinate_x;
-    /* 蛇头的移动 */
-    changePixel(header->ordinate, header->abscissa, snake.header_attr);
+    move_snake();
 }
 
 int main(int argc, char *argv[])

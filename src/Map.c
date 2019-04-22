@@ -139,7 +139,14 @@ void clearMap()
  */
 int changePixel(MAP_SIZE y, MAP_SIZE x, PIXEL pixel)
 {
-    *(*(map.pixel+y)+x) = pixel;
+    PIXEL *coordinate_p = *(map.pixel+y)+x;
+    char coordinate_c = coordinate_p->ch_p & A_CHARTEXT;
+    /* 解决食物出现在物体上的bug */
+    if ((pixel.ch_p & A_CHARTEXT) == FOOD_UNIT && coordinate_c != '\0' && coordinate_c != FLOOR_UNIT)
+    {
+        return ERR;
+    }
+    *coordinate_p = pixel;
     int rs = mvwaddch(map.map_sub_win, y, x, pixel.ch_p);
     wrefresh(map.map_sub_win);
 
