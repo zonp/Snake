@@ -12,4 +12,4 @@
 ./bin/snake
 ```
 
-![]()
+![](test/snake.png)
