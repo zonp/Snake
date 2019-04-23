@@ -11,5 +11,5 @@
 
 ./bin/snake
 ```
-
-![](test/snake.png)
+### 截图
+![截图](test/snake.png)
