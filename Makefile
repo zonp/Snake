@@ -1,4 +1,4 @@
-# test
+# snake
 #
 # 用 > 替代tab
 #.RECIPEPREFIX = >
