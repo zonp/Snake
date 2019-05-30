@@ -13,7 +13,7 @@
 #define FOOD_PAIR   3
 // 定义游戏元素
 #define FLOOR_UNIT      ' '
-#define FOOD_UNIT       '~'
+#define FOOD_UNIT       ACS_PLUS
 #define BODY_UNIT       ':'
 
 // 定义显示地图的指针函数的类型

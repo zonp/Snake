@@ -1,18 +1,7 @@
 //
 // Created by nelsonsun on 19-3-18.
 //
-
-#include <curses.h>
-#include <stdio.h>
-#include <sys/ioctl.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include <string.h>
-
-#include "Map.h"
-#include "Food.h"
-
+#include "Snake.h"
 /* implemented */
 
 void write_log()
@@ -30,8 +19,6 @@ void write_log()
  * changeDirect()
  */
 
-void *delete_body();
-
 void snake_break(char *str)
 {
     clearMap();
@@ -39,51 +26,6 @@ void snake_break(char *str)
     perror(str);
     exit(1);
 }
-
-/*
- * 蛇节属性
- * 蛇节属性
- */
-struct unit_attribute {
-    /* 是否是蛇头 */
-    bool is_head;
-    /* 纵坐标 */
-    MAP_SIZE ordinate;
-    /* 横坐标 */
-    MAP_SIZE abscissa;
-
-    /* 其他属性 */
-    PIXEL other_attr;
-
-    struct unit_attribute *next;
-};
-
-typedef struct unit_attribute unit_attr;
-/*
- * 前进方向
- */
-enum DIRECT {
-    DIRECT_BREAK = 10000,
-    DIRECT_UP,
-    DIRECT_DOWN,
-    DIRECT_LEFT,
-    DIRECT_RIGHT
-};
-
-struct {
-    enum DIRECT direct;
-    u_int8_t length;
-    /* 蛇头的坐标 */
-    MAP_SIZE coordinate_y;
-    MAP_SIZE coordinate_x;
-    /* 蛇的蛇头 链表 */
-    unit_attr *header;
-    unit_attr *last;
-    PIXEL header_attr;
-} snake;
-void show_snake();
-
-unit_attr *new_body(MAP_SIZE y, MAP_SIZE x);
 
 void init_snake()
 {
@@ -111,7 +53,7 @@ void show_snake()
 void move_snake()
 {
     /* 新的坐标的值 */
-    char coordinate_value = (*(map.pixel+snake.coordinate_y)+snake.coordinate_x)->ch_p & A_CHARTEXT;
+    char coordinate_value = (*(map.pixel+snake.coordinate_y)+snake.coordinate_x)->ch_p;
     unit_attr *header = snake.header;
     unit_attr *second = header->next;
 
@@ -131,6 +73,9 @@ void move_snake()
     changePixel(header->ordinate, header->abscissa, snake.header_attr);
 
     /* 有食物，不移动蛇尾，直接在蛇头后面添加一节新的 */
+    //10110
+    //10110
+    unsigned char test = FOOD_UNIT;
     if (coordinate_value == FOOD_UNIT)
     {
         /* 食物减1 */
@@ -283,7 +228,7 @@ void going(int keyCode)
     /* 查看地图，当前位置是否有食物 */
     /* 也可以通过 mvwinch(win, y, x) 获取坐标位置的chtype 判断 判 **/
     chtype ch = mvwinch(map.map_sub_win, snake.coordinate_y, snake.coordinate_x);
-    mvwprintw(map.map_win, map.row+4, 15, "inch : '%c' %d", ch & A_CHARTEXT, ch & A_CHARTEXT);
+    mvwprintw(map.map_win, map.row+4, 15, "inch : '%c' %d", FOOD_UNIT, ch & A_CHARTEXT);
     mvwprintw(map.map_win, map.row+3, 40, "coordinate Y=%d , %d", snake.coordinate_y, snake.header->ordinate);
     mvwprintw(map.map_win, map.row+4, 40, "coordinate X=%d , %d", snake.coordinate_x, snake.header->abscissa);
     wrefresh(map.map_win);

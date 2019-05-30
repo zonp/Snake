@@ -1,0 +1,73 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+DIRECT	snake.c	/^enum DIRECT {$/;"	g	file:
+DIRECT_BREAK	snake.c	/^    DIRECT_BREAK = 10000,$/;"	e	enum:DIRECT	file:
+DIRECT_DOWN	snake.c	/^    DIRECT_DOWN,$/;"	e	enum:DIRECT	file:
+DIRECT_LEFT	snake.c	/^    DIRECT_LEFT,$/;"	e	enum:DIRECT	file:
+DIRECT_RIGHT	snake.c	/^    DIRECT_RIGHT$/;"	e	enum:DIRECT	file:
+DIRECT_UP	snake.c	/^    DIRECT_UP,$/;"	e	enum:DIRECT	file:
+FOOD	Food.h	/^} FOOD;$/;"	t	typeref:struct:__anon2
+MAP	Map.h	/^} MAP;$/;"	t	typeref:struct:__anon3
+MAP_BG_COLOR	Map.h	25;"	d
+MAP_COL	Map.h	23;"	d
+MAP_FG_COLOR	Map.h	26;"	d
+MAP_ROW	Map.h	22;"	d
+MAP_SIZE	Map.h	21;"	d
+MAX_FOOD	Food.h	8;"	d
+SNAKE_FOOD_H	Food.h	6;"	d
+SNAKE_MAP_H	Map.h	6;"	d
+abscissa	Food.h	/^    MAP_SIZE abscissa;$/;"	m	struct:__anon2
+abscissa	Map.h	/^    MAP_SIZE abscissa;$/;"	m	struct:__anon3
+abscissa	snake.c	/^    MAP_SIZE abscissa;$/;"	m	struct:unit_attribute	file:
+bgColor	Food.h	/^    u_int8_t bgColor;$/;"	m	struct:__anon2
+changePixel	Map.c	/^int changePixel(MAP_SIZE y, MAP_SIZE x, PIXEL pixel)$/;"	f
+clearMap	Map.c	/^void clearMap()$/;"	f
+col	Map.h	/^    MAP_SIZE col;$/;"	m	struct:__anon3
+coordinate_x	snake.c	/^    MAP_SIZE coordinate_x;$/;"	m	struct:__anon1	file:
+coordinate_y	snake.c	/^    MAP_SIZE coordinate_y;$/;"	m	struct:__anon1	file:
+count	Food.h	/^    unsigned count;$/;"	m	struct:__anon2
+delete_body	snake.c	/^void *delete_body()$/;"	f
+direct	snake.c	/^    enum DIRECT direct;$/;"	m	struct:__anon1	typeref:enum:__anon1::DIRECT	file:
+exist	Map.h	/^    bool exist;$/;"	m	struct:__anon3
+fgColor	Food.h	/^    u_int8_t fgColor;$/;"	m	struct:__anon2
+floor_unit	Map.h	/^    PIXEL floor_unit;$/;"	m	struct:__anon3
+food	Food.h	/^FOOD food;$/;"	v
+going	snake.c	/^void going(int keyCode)$/;"	f
+header	snake.c	/^    unit_attr *header;$/;"	m	struct:__anon1	file:
+header_attr	snake.c	/^    PIXEL header_attr;$/;"	m	struct:__anon1	file:
+height	Food.h	/^    u_int8_t height;$/;"	m	struct:__anon2
+hello_world	Map.c	/^void hello_world()$/;"	f
+initFood	Food.c	/^void initFood()$/;"	f
+initMap	Map.c	/^void initMap()$/;"	f
+init_snake	snake.c	/^void init_snake()$/;"	f
+initialized	Food.h	/^    bool initialized;$/;"	m	struct:__anon2
+is_head	snake.c	/^    bool is_head;$/;"	m	struct:unit_attribute	file:
+last	snake.c	/^    unit_attr *last;$/;"	m	struct:__anon1	file:
+length	snake.c	/^    u_int8_t length;$/;"	m	struct:__anon1	file:
+main	snake.c	/^int main(int argc, char *argv[])$/;"	f
+map	Map.h	/^MAP map;$/;"	v
+map_color	Map.c	/^void map_color()$/;"	f
+map_sub_win	Map.h	/^    WINDOW *map_win, *map_sub_win;$/;"	m	struct:__anon3
+map_win	Map.h	/^    WINDOW *map_win, *map_sub_win;$/;"	m	struct:__anon3
+move_snake	snake.c	/^void move_snake()$/;"	f
+new_body	snake.c	/^unit_attr *new_body(MAP_SIZE y, MAP_SIZE x)$/;"	f
+next	snake.c	/^    struct unit_attribute *next;$/;"	m	struct:unit_attribute	typeref:struct:unit_attribute::unit_attribute	file:
+ordinate	Food.h	/^    MAP_SIZE ordinate;$/;"	m	struct:__anon2
+ordinate	Map.h	/^    MAP_SIZE ordinate;$/;"	m	struct:__anon3
+ordinate	snake.c	/^    MAP_SIZE ordinate;$/;"	m	struct:unit_attribute	file:
+other_attr	snake.c	/^    PIXEL other_attr;$/;"	m	struct:unit_attribute	file:
+pixel	Map.h	/^    PIXEL **pixel;$/;"	m	struct:__anon3
+row	Map.h	/^    MAP_SIZE row;$/;"	m	struct:__anon3
+show	Food.h	/^    FUN_POINTER *show;$/;"	m	struct:__anon2
+showFood	Food.c	/^void showFood()$/;"	f
+show_snake	snake.c	/^void show_snake()$/;"	f
+snake	snake.c	/^} snake;$/;"	v	typeref:struct:__anon1
+snake_break	snake.c	/^void snake_break(char *str)$/;"	f
+unit_attr	snake.c	/^typedef struct unit_attribute unit_attr;$/;"	t	typeref:struct:unit_attribute	file:
+unit_attribute	snake.c	/^struct unit_attribute {$/;"	s	file:
+width	Food.h	/^    u_int8_t width;$/;"	m	struct:__anon2
+write_log	snake.c	/^void write_log()$/;"	f
